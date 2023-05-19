@@ -1,4 +1,61 @@
+import {useState } from "react";
+import { nanoid } from "nanoid";
+import { RenderForm } from "./RenderForm";
+import { ListRender } from "./ListRender";
+import { FilterRend } from "./FilterRend";
+import { Notify } from "./Notify";
 export const App = () => {
+
+const [name,setName] = useState('')
+const [number,setNumber] = useState('')
+const [contact,setContact] = useState([])
+const [filter,setFilter] = useState('')
+
+
+const updateName = (evt) => {
+setName(evt.target.value)
+console.log(name)
+} 
+
+
+const filterContactsByName = () => {
+  return contact.filter(contact =>
+    contact.name.toLowerCase().includes(filter.toLowerCase())
+  );
+};
+
+
+const filterFunc = (evt) => {
+setFilter(evt.target.value)
+}
+
+const deleteContact = id => {
+    const updatedContacts = contact.filter(
+      contact => contact.id !== id
+    )
+      setContact(updatedContacts)
+}
+
+const updateNum = (evt)=> {
+  setNumber(evt.target.value)
+  console.log(number)
+}
+
+const handelClick = (evt) => {
+  evt.preventDefault()
+  const cont = {
+    name:name,
+    number:number,
+    id:nanoid()
+  }
+  setContact([...contact, cont])
+  setName('')
+  setNumber('')
+  setTimeout(()=> {
+    console.log(contact)
+  },3000)
+}
+
   return (
     <div
       style={{
@@ -10,7 +67,10 @@ export const App = () => {
         color: '#010101'
       }}
     >
-      React homework template
+<RenderForm funcSubmit={handelClick} funcNumber={updateNum} funcName={updateName} number={number} name={name}></RenderForm>
+{contact.length>0 && <ListRender arrayFunc={filterContactsByName} deleteFunc={deleteContact}></ListRender>}
+{contact.length === 0 && <Notify message={'plz add new contact'}></Notify>}
+<FilterRend filtertg={filter} funcfiltr={filterFunc}></FilterRend>
     </div>
   );
 };
