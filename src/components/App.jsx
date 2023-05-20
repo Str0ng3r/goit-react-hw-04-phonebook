@@ -1,4 +1,4 @@
-import {useState } from "react";
+import {useState,useEffect } from "react";
 import { nanoid } from "nanoid";
 import { RenderForm } from "./RenderForm";
 import { ListRender } from "./ListRender";
@@ -10,6 +10,14 @@ const [name,setName] = useState('')
 const [number,setNumber] = useState('')
 const [contact,setContact] = useState([])
 const [filter,setFilter] = useState('')
+
+
+useEffect(()=> {
+  const localContacts = JSON.parse(localStorage.getItem('contacts'));
+  if (localContacts) {
+    setContact(localContacts);
+  }
+},[]);
 
 
 const updateName = (evt) => {
@@ -34,6 +42,7 @@ const deleteContact = id => {
       contact => contact.id !== id
     )
       setContact(updatedContacts)
+      localStorage.setItem('contacts',JSON.stringify(contact))
 }
 
 const updateNum = (evt)=> {
@@ -51,6 +60,7 @@ const handelClick = (evt) => {
   setContact([...contact, cont])
   setName('')
   setNumber('')
+  localStorage.setItem('contacts',JSON.stringify([...contact, cont]))
   setTimeout(()=> {
     console.log(contact)
   },3000)
