@@ -1,10 +1,31 @@
-export const RenderForm = ({funcSubmit,funcName,funcNumber,number,name}) => {
+import { useState } from "react"
+export const RenderForm = ({addContact}) => {
+  const [name,setName] = useState('')
+const [number,setNumber] = useState('')
+
+const updateName = (evt) => {
+  setName(evt.target.value)
+  console.log(name)
+  } 
+  const updateNum = (evt)=> {
+    setNumber(evt.target.value)
+    console.log(number)
+  }
+
+
+  const handleSubmit = evt => {
+    evt.preventDefault();
+    addContact(name, number);
+    setName('')
+    setNumber('')
+  };
+    
     return (
-        <form onSubmit={funcSubmit}>
+        <form onSubmit={handleSubmit}>
         <h1>PhoneBook</h1>
         <h2>Name</h2>
         <input
-          onChange={funcName}
+          onChange={updateName}
           type="text"
           name="name"
           value={name}
@@ -13,7 +34,7 @@ export const RenderForm = ({funcSubmit,funcName,funcNumber,number,name}) => {
           required
         />
         <input
-          onChange={funcNumber}
+          onChange={updateNum}
           value={number}
           type="tel"
           name="number"

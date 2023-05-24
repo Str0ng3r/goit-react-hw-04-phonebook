@@ -6,8 +6,6 @@ import { FilterRend } from "./FilterRend";
 import { Notify } from "./Notify";
 export const App = () => {
 
-const [name,setName] = useState('')
-const [number,setNumber] = useState('')
 const [contact,setContact] = useState([])
 const [filter,setFilter] = useState('')
 
@@ -19,11 +17,6 @@ useEffect(()=> {
   }
 },[]);
 
-
-const updateName = (evt) => {
-setName(evt.target.value)
-console.log(name)
-} 
 
 
 const filterContactsByName = () => {
@@ -37,34 +30,39 @@ const filterFunc = (evt) => {
 setFilter(evt.target.value)
 }
 
-const deleteContact = id => {
-    const updatedContacts = contact.filter(
-      contact => contact.id !== id
-    )
-      setContact(updatedContacts)
-      localStorage.setItem('contacts',JSON.stringify(contact))
-}
 
-const updateNum = (evt)=> {
-  setNumber(evt.target.value)
-  console.log(number)
-}
 
-const handelClick = (evt) => {
-  evt.preventDefault()
-  const cont = {
+
+const deleteContact = (id) => {
+  const updatedContacts = contact.filter((contact) => contact.id !== id);
+  setContact(updatedContacts);
+  localStorage.setItem('contacts', JSON.stringify(updatedContacts)); // Исправлено на updatedContacts
+};
+
+
+
+
+
+const addContact = (name, number) => {
+  const isNameAlreadyExists = contact.some(
+    contact => contact.name === name
+  );
+  if (isNameAlreadyExists) {
+    alert('Таке імя вже існує');
+    return;
+  }
+
+  const newContact = {
+    id: nanoid(),
     name:name,
     number:number,
-    id:nanoid()
-  }
-  setContact([...contact, cont])
-  setName('')
-  setNumber('')
-  localStorage.setItem('contacts',JSON.stringify([...contact, cont]))
-  setTimeout(()=> {
-    console.log(contact)
-  },3000)
-}
+  };
+setContact([...contact, newContact])
+      localStorage.setItem(
+        'contactsLocale',
+        JSON.stringify(contact)
+      );
+    }
 
   return (
     <div
@@ -77,7 +75,7 @@ const handelClick = (evt) => {
         color: '#010101'
       }}
     >
-<RenderForm funcSubmit={handelClick} funcNumber={updateNum} funcName={updateName} number={number} name={name}></RenderForm>
+<RenderForm addContact={addContact}></RenderForm>
 {contact.length>0 && <ListRender arrayFunc={filterContactsByName} deleteFunc={deleteContact}></ListRender>}
 {contact.length === 0 && <Notify message={'plz add new contact'}></Notify>}
 <FilterRend filtertg={filter} funcfiltr={filterFunc}></FilterRend>
