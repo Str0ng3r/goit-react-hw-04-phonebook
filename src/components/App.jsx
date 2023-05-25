@@ -16,6 +16,12 @@ export const App = () => {
     }
   }, []);
 
+  useEffect(() => {
+if(contact.length>0){
+    localStorage.setItem("contacts", JSON.stringify(contact))
+}
+  }, [contact]);
+
   const filterContactsByName = () => {
     return contact.filter((contact) =>
       contact.name.toLowerCase().includes(filter.toLowerCase())
@@ -29,13 +35,12 @@ export const App = () => {
   const deleteContact = (id) => {
     const updatedContacts = contact.filter((contact) => contact.id !== id);
     setContact(updatedContacts);
-    localStorage.setItem("contacts", JSON.stringify(updatedContacts));
   };
 
   const addContact = (name, number) => {
     const isNameAlreadyExists = contact.some((contact) => contact.name === name);
     if (isNameAlreadyExists) {
-      alert("Таке імя вже існує");
+      alert("Такое имя уже существует");
       return;
     }
 
@@ -46,15 +51,6 @@ export const App = () => {
     };
     setContact([...contact, newContact]);
   };
-
-// useEffect(()=> {
-//   const localData = JSON.parse(localStorage.getItem('contacts'))
-//   setContact(localData)
-// },[])
-
-  useEffect(() => {
-    localStorage.setItem("contacts", JSON.stringify(contact));
-  }, [contact]);
 
   return (
     <div
@@ -69,7 +65,7 @@ export const App = () => {
     >
       <RenderForm addContact={addContact}></RenderForm>
       {contact.length > 0 && <ListRender arrayFunc={filterContactsByName} deleteFunc={deleteContact}></ListRender>}
-      {contact.length === 0 && <Notify message={"plz add new contact"}></Notify>}
+      {contact.length === 0 && <Notify message={"Пожалуйста, добавьте новый контакт"}></Notify>}
       <FilterRend filtertg={filter} funcfiltr={filterFunc}></FilterRend>
     </div>
   );
