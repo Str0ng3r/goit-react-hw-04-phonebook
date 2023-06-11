@@ -1,25 +1,25 @@
-import { createStore } from "redux";
-import { persistStore, persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage";
+import { configureStore } from '@reduxjs/toolkit';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
 const persistConfig = {
-  key: "root",
+  key: 'root',
   storage,
 };
 
 const rootReducer = (state, action) => {
   switch (action.type) {
-    case "addContact":
+    case 'addContact':
       return {
         ...state,
         contacts: [...state.contacts, action.contact],
       };
-    case "deleteContact":
+    case 'deleteContact':
       return {
         ...state,
         contacts: state.contacts.filter((contact) => contact.id !== action.id),
       };
-    case "setFilter":
+    case 'setFilter':
       return {
         ...state,
         filter: action.filter,
@@ -31,9 +31,14 @@ const rootReducer = (state, action) => {
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-export const store = createStore(persistedReducer,{
+const store = configureStore({
+  reducer: persistedReducer,
+  preloadedState: {
     contacts: [],
-    filter: "",
-  });
+    filter: '',
+  },
+});
 
 export const persistor = persistStore(store);
+
+export default store;
