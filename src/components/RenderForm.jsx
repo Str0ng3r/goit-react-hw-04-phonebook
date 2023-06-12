@@ -1,5 +1,10 @@
 import { useState } from "react"
-export const RenderForm = ({addContact}) => {
+import { useDispatch, useSelector } from 'react-redux';
+import {addContact } from 'redux/contactsSlice';
+import { nanoid } from 'nanoid';
+export const RenderForm = () => {
+  const contacts = useSelector(state => state.contacts);
+  const dispatch = useDispatch();
   const [name,setName] = useState('')
 const [number,setNumber] = useState('')
 
@@ -13,9 +18,25 @@ const updateName = (evt) => {
   }
 
 
+  const addContactFunc = (name, number) => {
+    const isNameAlreadyExists = contacts.some(contact => contact.name === name);
+    if (isNameAlreadyExists) {
+      alert('Такое имя уже существует');
+      return;
+    }
+
+    const newContact = {
+      id: nanoid(),
+      name: name,
+      number: number,
+    };
+    dispatch(addContact(newContact));
+  };
+
+
   const handleSubmit = evt => {
     evt.preventDefault();
-    addContact(name, number);
+    addContactFunc(name, number);
     setName('')
     setNumber('')
   };
