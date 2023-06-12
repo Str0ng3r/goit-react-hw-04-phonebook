@@ -1,30 +1,19 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { nanoid } from "nanoid";
 import { useDispatch, useSelector } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
-import { persistor } from "redux/store";
+import { persistor } from "redux/store"; 
 import { RenderForm } from "./RenderForm";
 import { ListRender } from "./ListRender";
 import { FilterRend } from "./FilterRend";
 import { Notify } from "./Notify";
 
+import { setFilter, deleteContact, addContact} from "redux/contactsSlice";
+
 export const App = () => {
   const contacts = useSelector((state) => state.contacts);
   const filter = useSelector((state) => state.filter);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    const localContacts = JSON.parse(localStorage.getItem("contacts"));
-    if (localContacts) {
-      dispatch({ type: "setContacts", contacts: localContacts });
-    }
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (contacts.length > 0) {
-      localStorage.setItem("contacts", JSON.stringify(contacts));
-    }
-  }, [contacts]);
 
   const filterContactsByName = () => {
     return contacts.filter((contact) =>
@@ -33,14 +22,14 @@ export const App = () => {
   };
 
   const filterFunc = (evt) => {
-    dispatch({ type: "setFilter", filter: evt.target.value });
+    dispatch(setFilter(evt.target.value));
   };
 
-  const deleteContact = (id) => {
-    dispatch({ type: "deleteContact", id });
+  const deleteContactFunc = (id) => {
+    dispatch(deleteContact(id));
   };
 
-  const addContact = (name, number) => {
+  const addContactFunc = (name, number) => {
     const isNameAlreadyExists = contacts.some(
       (contact) => contact.name === name
     );
@@ -54,7 +43,7 @@ export const App = () => {
       name: name,
       number: number,
     };
-    dispatch({ type: "addContact", contact: newContact });
+    dispatch(addContact(newContact));
   };
 
   return (
@@ -69,11 +58,11 @@ export const App = () => {
           color: "#010101",
         }}
       >
-        <RenderForm addContact={addContact}></RenderForm>
+        <RenderForm addContact={addContactFunc}></RenderForm>
         {contacts.length > 0 && (
           <ListRender
             arrayFunc={filterContactsByName}
-            deleteFunc={deleteContact}
+            deleteFunc={deleteContactFunc}
           ></ListRender>
         )}
         {contacts.length === 0 && (
