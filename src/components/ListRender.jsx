@@ -1,13 +1,15 @@
 import { LiRender } from "./LiRender"
 import { useDispatch, useSelector } from 'react-redux';
-import {  deleteContact} from 'redux/contactsSlice';
+import { deleteBackContacts} from "redux/contactsSlice";
 export const ListRender = () => {
-    const contacts = useSelector(state => state.contacts);
+    const contacts = useSelector(state => state.contacts.items);
     const filter = useSelector(state => state.filter);
     const dispatch = useDispatch();
+
  
     const deleteContactFunc = id => {
-        dispatch(deleteContact(id));
+      console.log(id)
+        dispatch(deleteBackContacts(id));
       };
 
     const filterContactsByName = () => {

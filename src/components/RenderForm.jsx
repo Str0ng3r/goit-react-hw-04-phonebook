@@ -1,9 +1,9 @@
 import { useState } from "react"
 import { useDispatch, useSelector } from 'react-redux';
-import {addContact } from 'redux/contactsSlice';
 import { nanoid } from 'nanoid';
+import { addBackContacts} from "redux/contactsSlice";
 export const RenderForm = () => {
-  const contacts = useSelector(state => state.contacts);
+  const contacts = useSelector(state => state.contacts.items);
   const dispatch = useDispatch();
   const [name,setName] = useState('')
 const [number,setNumber] = useState('')
@@ -30,7 +30,7 @@ const updateName = (evt) => {
       name: name,
       number: number,
     };
-    dispatch(addContact(newContact));
+    dispatch(addBackContacts(newContact));
   };
 
 
