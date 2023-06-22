@@ -97,4 +97,4 @@ reducers:{
 
 const { actions } = contactsSlice;
 export const mainReducer = contactsSlice.reducer;
-export const { addContact, deleteContact, setFilter } = actions;
+export const {setFilter } = actions;
