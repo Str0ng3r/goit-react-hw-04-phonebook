@@ -1,21 +1,12 @@
 import React from 'react';
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { RenderForm } from './RenderForm';
-import { ListRender } from './ListRender';
-import { FilterRend } from './FilterRend';
-import { Notify } from './Notify';
-import { fetchContacts } from 'redux/contactsSlice';
+import { Routes, Route } from 'react-router-dom';
+import { Registration } from './Registration';
+import { Login } from './Login';
+import { Home } from './Home';
+import { Header } from './Header';
 
 export const App = () => {
-  const dispatch = useDispatch();
-  const contacts = useSelector(state => state.contacts.items);
-  const loading = useSelector(state=> state.contacts.isLoading)
-  useEffect(() => {
-    dispatch(fetchContacts());
-  }, [dispatch]);
   return (
-    
     <div
       style={{
         height: '100vh',
@@ -24,16 +15,15 @@ export const App = () => {
         alignItems: 'center',
         fontSize: 40,
         color: '#010101',
+        flexDirection:'column'
       }}
     >
-      
-      <RenderForm></RenderForm>
-      {loading && <h2>LOADING...</h2>}
-      {contacts.length > 0 && <ListRender></ListRender>}
-      {contacts.length === 0 && (
-        <Notify message={'Пожалуйста, добавьте новый контакт'}></Notify>
-      )}
-      <FilterRend></FilterRend>
+    <Header></Header>
+      <Routes>
+        <Route index element={<Home></Home>}></Route>
+        <Route path='/registr' element={<Registration></Registration>}></Route>
+        <Route path='/login' element={<Login></Login>}></Route>
+      </Routes>
     </div>
   );
 };
