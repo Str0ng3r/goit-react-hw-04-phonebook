@@ -16,7 +16,37 @@
     left: 0;
     width: 100%;
     padding: 10px;
-    background-color: blanchedalmond;
+    background-color: #526D82;
     display: flex;
     justify-content: space-around;
+}
+.blockInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.name {
+    font-size: 16px;
+    margin: 0;
+}
+.email {
+    margin: 0;
+    font-size: 14px;
+    color: darkgray;
+}
+.contAuthor {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+.btnLogOut {
+    background-color: transparent;
+    font-size: 10px;
+    text-align: center;
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-left: 6px;
 }

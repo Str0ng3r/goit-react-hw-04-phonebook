@@ -4,6 +4,7 @@ import { Registration } from './Registration';
 import { Login } from './Login';
 import { Home } from './Home';
 import { Header } from './Header';
+import PrivateRoute from 'PrivateRoute/PrivateRoute';
 
 export const App = () => {
   return (
@@ -12,6 +13,7 @@ export const App = () => {
         height: '100vh',
         display: 'flex',
         justifyContent: 'center',
+        backgroundColor:'#505C65',
         alignItems: 'center',
         fontSize: 40,
         color: '#010101',
@@ -20,7 +22,7 @@ export const App = () => {
     >
     <Header></Header>
       <Routes>
-        <Route index element={<Home></Home>}></Route>
+        <Route path='/' element={<PrivateRoute><Home></Home></PrivateRoute>}></Route>
         <Route path='/registr' element={<Registration></Registration>}></Route>
         <Route path='/login' element={<Login></Login>}></Route>
       </Routes>
