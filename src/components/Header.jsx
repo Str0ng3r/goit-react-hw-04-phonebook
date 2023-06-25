@@ -10,17 +10,17 @@ const dispatch = useDispatch()
     const author = useSelector(state=> state.info.autorizated)
     return (
         <header className={style.header}>
-<Link to={'/'}>Home</Link>
-{!author && <Link to={'/registr'}>Registration</Link>}
-{!author && <Link to={'/login'}>Login</Link>}
+{!author && <Link to={'/'} className={style.btnLink}>PhoneBook</Link>}
+{!author && <Link to={'/registr'} className={style.btnLink}>Registration</Link>}
+{!author && <Link to={'/login'} className={style.btnLink}>Login</Link>}
 
-<div className={style.contAuthor}>
+{nameUser && <div className={style.contAuthor}>
 <div className={style.blockInfo}>
-{nameUser && <p className={style.name}>{nameUser}</p>}
-{emailUser && <p className={style.email}>{emailUser}</p>}
+<p className={style.name}>{nameUser}</p>
+ <p className={style.email}>{emailUser}</p>
 </div>
-{author && <button type="button" onClick={() => {dispatch(logOut())}} className={style.btnLogOut}>Log Out</button>}
-</div>
+ <button type="button" onClick={() => {dispatch(logOut())}} className={style.btnLogOut}>Log Out</button>
+</div>}
 
 <Outlet/>
         </header>

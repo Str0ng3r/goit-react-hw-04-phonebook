@@ -13,7 +13,7 @@ export const App = () => {
         height: '100vh',
         display: 'flex',
         justifyContent: 'center',
-        backgroundColor:'#505C65',
+        backgroundColor:'#0B1227',
         alignItems: 'center',
         fontSize: 40,
         color: '#010101',

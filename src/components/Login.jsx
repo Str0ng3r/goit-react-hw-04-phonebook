@@ -41,35 +41,45 @@ export const Login = () => {
   }, [author, navigate]);
   return (
 
-    <div className={style.divColumn}>
-            {!author && <h2>You are not logined</h2>}
+    <div className={style.formContainer}>
+            {!author && <h2 className={style.title}>You are not logined</h2>}
       <form className={style.form}>
-        <h1>Login</h1>
-        <h2>Plz write your email</h2>
+        <h1 className={style.title}>Login</h1>
+        
+        <div className={style.inputGroup}>
+        <label className={style.label}>email</label>
         <input
           type="text"
           value={email}
+          className={style.inputForm}
           onChange={evt => {
             setEmail(evt.target.value);
           }}
         />
-        <h2>Plz write your password</h2>
+        </div>
+
+       <div className={style.inputGroup}>
+       <label className={style.label}>password</label>
         <input
+        id='password'
           type="password"
           value={password}
+          className={style.inputForm}
           onChange={evt => {
             setPassword(evt.target.value);
           }}
         />
+        </div>
         <button
           type="submit"
           onClick={handleLogin}
+          className={style.buttonLogin}
         >
           Login
         </button>
       </form>
-      <h2>Don't have account?</h2>
-      <Link to={'/registr'}>Click here</Link>
+      <h2 className={style.forgotCreate}>Don't have account?</h2>
+      <Link to={'/registr'} className={style.forgotCreateLink}>Click here</Link>
     </div>
   );
 };

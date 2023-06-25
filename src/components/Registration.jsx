@@ -34,40 +34,49 @@ export const Registration = () => {
   };
 
   return (
-    <div className={style.divColumn}>
+    <div className={style.formContainer}>
       <form className={style.form}>
-        <h1>Registration</h1>
+        <h1 className={style.title}>Registration</h1>
 
-        <h2>Plz write your name</h2>
+        <div className={style.inputGroup}>
+        <label className={style.label}>name</label>
         <input
           type="text"
+          className={style.inputForm}
           value={name}
           onChange={evt => {
             setName(evt.target.value);
           }}
         />
-        <h2>Plz write your email</h2>
+        </div>
+        <div className={style.inputGroup}>
+        <label className={style.label}>email</label>
         <input
           type="text"
           value={email}
+          className={style.inputForm}
           onChange={evt => {
             setEmail(evt.target.value);
           }}
         />
-        <h2>Plz write your password</h2>
+        </div>
+        <div className={style.inputGroup}>
+        <label className={style.label}>password</label>
         <input
           type="password"
           value={password}
+          className={style.inputForm}
           onChange={evt => {
             setPassword(evt.target.value);
           }}
         />
-        <button type="submit" onClick={createUserFunc}>
+        </div>
+        <button type="submit"  className={style.buttonLogin} onClick={createUserFunc}>
           Registration
         </button>
       </form>
-      <h2>Have account?</h2>
-      <Link to={'/login'}>Click here</Link>
+      <h2 className={style.forgotCreate}>Have account?</h2>
+      <Link to={'/login'} className={style.forgotCreateLink}>Click here</Link>
     </div>
   );
 };
