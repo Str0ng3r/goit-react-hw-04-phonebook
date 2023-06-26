@@ -30,7 +30,7 @@ const updateName = (evt) => {
       name: name,
       number: number,
     };
-    dispatch(addBackContacts({newContact,token}));
+    dispatch(addBackContacts({ contact: newContact, token }));
   };
 
 

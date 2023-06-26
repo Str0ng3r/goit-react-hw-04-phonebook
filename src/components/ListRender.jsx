@@ -4,13 +4,18 @@ import { deleteBackContacts} from "redux/contactsSlice";
 export const ListRender = () => {
     const contacts = useSelector(state => state.contacts.items);
     const filter = useSelector(state => state.filter);
+    const token = useSelector(state=> state.info.token)
     const dispatch = useDispatch();
 
  
     const deleteContactFunc = id => {
       console.log(id)
-        dispatch(deleteBackContacts(id));
+      const payload = {
+        id: id,
+        token: token
       };
+      dispatch(deleteBackContacts(payload));
+    };
 
     const filterContactsByName = () => {
         return contacts.filter(contact =>

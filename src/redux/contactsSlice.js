@@ -89,6 +89,7 @@ export const addBackContacts = createAsyncThunk(
         },
       });
       console.log(responseData);
+      thunkAPI.dispatch(fetchContacts(token))
       return responseData;
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
@@ -98,10 +99,13 @@ export const addBackContacts = createAsyncThunk(
 
 export const deleteBackContacts = createAsyncThunk(
   'contacts/deleteContacts',
-  async (id, thunkAPI) => {
+  async ({id,token} ,thunkAPI) => {
     try {
-      const response = await axios.delete(`/contacts/${id}`);
-      await thunkAPI.dispatch(fetchContacts());
+      const response = await axios.delete(`/contacts/${id}`,{headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: '*/*',
+      }});
+      await thunkAPI.dispatch(fetchContacts(token));
       return response.data;
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
@@ -181,7 +185,7 @@ const contactsSlice = createSlice({
     [fetchContacts.fulfilled](state, action) {
       state.contacts.error = null;
       state.contacts.isLoading = false;
-      state.contacts.items = action.data;
+      state.contacts.items = action.payload.data;
     },
     [fetchContacts.rejected](state, action) {
       state.contacts.isLoading = false;
