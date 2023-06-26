@@ -5,6 +5,7 @@ import style from 'style.module.css'
 export const RenderForm = () => {
   const contacts = useSelector(state => state.contacts.items);
   const dispatch = useDispatch();
+  const token = useSelector(state => state.info.token)
   const [name,setName] = useState('')
 const [number,setNumber] = useState('')
 
@@ -29,7 +30,7 @@ const updateName = (evt) => {
       name: name,
       number: number,
     };
-    dispatch(addBackContacts(newContact));
+    dispatch(addBackContacts({newContact,token}));
   };
 
 

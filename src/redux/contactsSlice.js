@@ -32,7 +32,7 @@ export const loginUser = createAsyncThunk(
         },
       });
       console.log(response);
-      return response
+      return response;
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
     }
@@ -41,10 +41,36 @@ export const loginUser = createAsyncThunk(
 
 export const fetchContacts = createAsyncThunk(
   'contacts/fetchAll',
-  async (_, thunkAPI) => {
+  async (token, thunkAPI) => {
     try {
-      const responseData = await axios.get('/contacts');
+      const responseData = await axios.get('/contacts', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: '*/*',
+        },
+      });
+      console.log(responseData);
       return responseData;
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+
+export const userLogOut = createAsyncThunk(
+  'contacts/logout',
+  async (token, thunkAPI) => {
+    try {
+      const result = await axios.post(
+        '/users/logout',
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      await console.log(result);
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
     }
@@ -53,11 +79,17 @@ export const fetchContacts = createAsyncThunk(
 
 export const addBackContacts = createAsyncThunk(
   'contacts/addContacts',
-  async (contact, thunkAPI) => {
+  async ({ contact, token }, thunkAPI) => {
     try {
-      const response = await axios.post('/contacts', contact);
-      await thunkAPI.dispatch(fetchContacts());
-      return response.data;
+      const responseData = await axios.post('/contacts', contact, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: '*/*',
+          'Content-Type': 'application/json',
+        },
+      });
+      console.log(responseData);
+      return responseData;
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
     }
@@ -86,7 +118,7 @@ const contactsSlice = createSlice({
       autorizated: false,
       name: null,
       email: null,
-      token:null
+      token: null,
     },
     contacts: {
       items: [],
@@ -99,12 +131,6 @@ const contactsSlice = createSlice({
     setFilter: (state, action) => {
       state.filter = action.payload;
     },
-    logOut:(state, action) => {
-      state.info.autorizated = false
-      state.info.name = null
-      state.info.email = null
-      state.info.token = null
-    }
   },
   extraReducers: {
     // [addNewUser.pending](state,action){
@@ -118,7 +144,22 @@ const contactsSlice = createSlice({
     //   state.contacts.autorizated = false
     //   state.contacts.isLoading = false
     // },
-
+    [userLogOut.pending](state, action) {
+      state.contacts.isLoading = true;
+      state.contacts.error = null;
+    },
+    [userLogOut.fulfilled](state, action) {
+      state.contacts.isLoading = false;
+      state.contacts.error = null;
+      state.info.autorizated = false;
+      state.info.name = null;
+      state.info.email = null;
+      state.info.token = null;
+    },
+    [userLogOut.rejected](state, action) {
+      state.contacts.isLoading = false;
+      state.contacts.error = action.payload;
+    },
     [loginUser.pending](state, action) {
       state.contacts.isLoading = true;
     },
@@ -128,7 +169,7 @@ const contactsSlice = createSlice({
       state.contacts.error = false;
       state.info.name = action.payload.data.user.name;
       state.info.email = action.payload.data.user.email;
-      state.info.token = action.payload.data.token
+      state.info.token = action.payload.data.token;
     },
     [loginUser.rejected](state, action) {
       state.contacts.isLoading = false;
@@ -140,7 +181,7 @@ const contactsSlice = createSlice({
     [fetchContacts.fulfilled](state, action) {
       state.contacts.error = null;
       state.contacts.isLoading = false;
-      state.contacts.items = action.payload.data;
+      state.contacts.items = action.data;
     },
     [fetchContacts.rejected](state, action) {
       state.contacts.isLoading = false;
@@ -173,4 +214,4 @@ const contactsSlice = createSlice({
 
 const { actions } = contactsSlice;
 export const mainReducer = contactsSlice.reducer;
-export const { setFilter,logOut } = actions;
+export const { setFilter, logOut } = actions;
