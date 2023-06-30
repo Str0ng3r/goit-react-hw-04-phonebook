@@ -172,7 +172,7 @@ const contactsSlice = createSlice({
       state.contacts.isLoading = false;
       state.contacts.error = null;
       state.info.autorizated = false;
-      localStorage.setItem('token',null)
+      localStorage.setItem('token','')
       state.info.name = null;
       state.info.email = null;
       state.info.token = null;
