@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import style from 'style.module.css';
-import { loginUser } from 'redux/contactsSlice';
+import { loginUser} from 'redux/contactsSlice';
 export const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -22,7 +22,7 @@ export const Login = () => {
     };
 
     dispatch(loginUser(dataUser)).unwrap().then(()=> {
-        navigate('/')
+        navigate('/contacts')
         alert(`welcome`)
     }).catch(()=> {
         alert('Error this user dont have in system')
@@ -31,12 +31,9 @@ export const Login = () => {
     setEmail('');
     setPassword('');
   }
-  
-  
-  
   useEffect(() => {
     if (author) {
-      navigate('/');
+      navigate('/contacts');
     }
   }, [author, navigate]);
   return (

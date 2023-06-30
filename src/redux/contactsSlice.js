@@ -39,6 +39,29 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+export const refreshUser = createAsyncThunk(
+  '/contacts/refresh',
+  async (token,thunkAPI) => {
+try {
+  const response = await axios.get('/users/current', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      accept: '*/*',
+      'Content-Type': 'application/json',
+    }
+  })
+  const data = {
+    name:response.data.name,
+    email:response.data.email,
+    token:token
+  }
+  return data
+}catch (e) {
+  return thunkAPI.rejectWithValue(e.message);
+}
+
+  });
+
 export const fetchContacts = createAsyncThunk(
   'contacts/fetchAll',
   async (token, thunkAPI) => {
@@ -89,8 +112,7 @@ export const addBackContacts = createAsyncThunk(
         },
       });
       console.log(responseData);
-      thunkAPI.dispatch(fetchContacts(token))
-      return responseData;
+      thunkAPI.dispatch(fetchContacts(token));
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
     }
@@ -99,12 +121,14 @@ export const addBackContacts = createAsyncThunk(
 
 export const deleteBackContacts = createAsyncThunk(
   'contacts/deleteContacts',
-  async ({id,token} ,thunkAPI) => {
+  async ({ id, token }, thunkAPI) => {
     try {
-      const response = await axios.delete(`/contacts/${id}`,{headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: '*/*',
-      }});
+      const response = await axios.delete(`/contacts/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: '*/*',
+        },
+      });
       await thunkAPI.dispatch(fetchContacts(token));
       return response.data;
     } catch (e) {
@@ -135,19 +159,11 @@ const contactsSlice = createSlice({
     setFilter: (state, action) => {
       state.filter = action.payload;
     },
+    setToken:(state,action) => {
+      state.info.token = action.payload.token
+    }
   },
   extraReducers: {
-    // [addNewUser.pending](state,action){
-    //   state.contacts.isLoading = true;
-    // },
-    // [addNewUser.fulfilled](state,action){
-    //   state.contacts.autorizated = true
-    //   state.contacts.isLoading = false
-    // },
-    // [addNewUser.rejected](state,action){
-    //   state.contacts.autorizated = false
-    //   state.contacts.isLoading = false
-    // },
     [userLogOut.pending](state, action) {
       state.contacts.isLoading = true;
       state.contacts.error = null;
@@ -156,6 +172,7 @@ const contactsSlice = createSlice({
       state.contacts.isLoading = false;
       state.contacts.error = null;
       state.info.autorizated = false;
+      localStorage.setItem('token',null)
       state.info.name = null;
       state.info.email = null;
       state.info.token = null;
@@ -164,6 +181,25 @@ const contactsSlice = createSlice({
       state.contacts.isLoading = false;
       state.contacts.error = action.payload;
     },
+    [refreshUser.pending](state,action){
+state.contacts.isLoading = true;
+    },
+    [refreshUser.fulfilled](state,action){
+      state.contacts.isLoading = false;
+      state.info.name = action.payload.name;
+      state.info.email = action.payload.email;
+      state.info.token = action.payload.token
+      state.info.autorizated = true;
+      state.contacts.error = null;
+          },
+          [refreshUser.rejected](state,action){
+            state.contacts.isLoading = false;
+            state.contacts.error = action.payload;
+            state.info.autorizated = false;
+            state.info.email = null;
+            state.info.name = null;
+            state.info.token = null;
+                },
     [loginUser.pending](state, action) {
       state.contacts.isLoading = true;
     },
@@ -174,6 +210,7 @@ const contactsSlice = createSlice({
       state.info.name = action.payload.data.user.name;
       state.info.email = action.payload.data.user.email;
       state.info.token = action.payload.data.token;
+      localStorage.setItem('token', action.payload.data.token);
     },
     [loginUser.rejected](state, action) {
       state.contacts.isLoading = false;
@@ -218,4 +255,4 @@ const contactsSlice = createSlice({
 
 const { actions } = contactsSlice;
 export const mainReducer = contactsSlice.reducer;
-export const { setFilter, logOut } = actions;
+export const { setFilter, setToken } = actions;

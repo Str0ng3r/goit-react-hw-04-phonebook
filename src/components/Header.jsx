@@ -11,7 +11,7 @@ const dispatch = useDispatch()
     const author = useSelector(state=> state.info.autorizated)
     return (
         <header className={style.header}>
-{!author && <Link to={'/'} className={style.btnLink}>PhoneBook</Link>}
+{!author && <Link to={'/contacts'} className={style.btnLink}>PhoneBook</Link>}
 {!author && <Link to={'/registr'} className={style.btnLink}>Registration</Link>}
 {!author && <Link to={'/login'} className={style.btnLink}>Login</Link>}
 
