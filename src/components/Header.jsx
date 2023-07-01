@@ -7,7 +7,7 @@ export const Header = () => {
 const dispatch = useDispatch()
     const nameUser = useSelector(state => state.info.name)
     const emailUser = useSelector(state => state.info.email)
-    const token = useSelector(state => state.info.token)
+    const token = useSelector(state => state.token)
     const author = useSelector(state=> state.info.autorizated)
     return (
         <header className={style.header}>

@@ -11,7 +11,7 @@ export const Home = () => {
     const dispatch = useDispatch();
     const contacts = useSelector(state => state.contacts.items);
     const loading = useSelector(state=> state.contacts.isLoading)
-    const token = useSelector(state => state.info.token)
+    const token = useSelector(state => state.token)
     useEffect(() => {
       dispatch(fetchContacts(token));
     }, [dispatch,token]);

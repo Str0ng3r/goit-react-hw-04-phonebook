@@ -5,7 +5,7 @@ import style from 'style.module.css'
 export const RenderForm = () => {
   const contacts = useSelector(state => state.contacts.items);
   const dispatch = useDispatch();
-  const token = useSelector(state => state.info.token)
+  const token = useSelector(state => state.token)
   const [name,setName] = useState('')
 const [number,setNumber] = useState('')
 

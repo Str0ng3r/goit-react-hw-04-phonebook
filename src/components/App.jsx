@@ -6,22 +6,22 @@ import { Home } from './Home';
 import { Header } from './Header';
 import PrivateRoute from 'PrivateRoute/PrivateRoute';
 import { useDispatch, useSelector } from 'react-redux';
-import { refreshUser } from 'redux/contactsSlice';
+import { refreshUser} from 'redux/contactsSlice';
+
 
 export const App = () => {
 const dispatch = useDispatch()
 const author = useSelector(state => state.info.autorizated)
-
+const token = useSelector(state => state.token)
 const navigate = useNavigate();
 
-  useEffect(()=> {const token = localStorage.getItem('token')
-  if(token){
-    dispatch(refreshUser(token))
-  }
-  if (author) {
-    navigate('/contacts');
-  }
-},[dispatch,navigate,author])
+useEffect(()=> {
+  if(token !== ''){
+dispatch(refreshUser(token))
+  }else if(author){
+  navigate('/contacts')
+}
+},[token,dispatch,author,navigate])
   return (
     <div
       style={{

@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+
 axios.defaults.baseURL = 'https://connections-api.herokuapp.com';
 
 export const addNewUser = createAsyncThunk(
@@ -13,7 +14,7 @@ export const addNewUser = createAsyncThunk(
           'Content-Type': 'application/json',
         },
       });
-      console.log(response);
+
       return response;
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
@@ -31,7 +32,6 @@ export const loginUser = createAsyncThunk(
           'Content-Type': 'application/json',
         },
       });
-      console.log(response);
       return response;
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
@@ -41,26 +41,26 @@ export const loginUser = createAsyncThunk(
 
 export const refreshUser = createAsyncThunk(
   '/contacts/refresh',
-  async (token,thunkAPI) => {
-try {
-  const response = await axios.get('/users/current', {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      accept: '*/*',
-      'Content-Type': 'application/json',
+  async (token, thunkAPI) => {
+    try {
+      const response = await axios.get('/users/current', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          accept: '*/*',
+          'Content-Type': 'application/json',
+        },
+      });
+      const data = {
+        name: response.data.name,
+        email: response.data.email,
+        token: token,
+      };
+      return data;
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
     }
-  })
-  const data = {
-    name:response.data.name,
-    email:response.data.email,
-    token:token
   }
-  return data
-}catch (e) {
-  return thunkAPI.rejectWithValue(e.message);
-}
-
-  });
+);
 
 export const fetchContacts = createAsyncThunk(
   'contacts/fetchAll',
@@ -72,7 +72,6 @@ export const fetchContacts = createAsyncThunk(
           Accept: '*/*',
         },
       });
-      console.log(responseData);
       return responseData;
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
@@ -111,7 +110,7 @@ export const addBackContacts = createAsyncThunk(
           'Content-Type': 'application/json',
         },
       });
-      console.log(responseData);
+      console.log(responseData)
       thunkAPI.dispatch(fetchContacts(token));
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
@@ -146,7 +145,6 @@ const contactsSlice = createSlice({
       autorizated: false,
       name: null,
       email: null,
-      token: null,
     },
     contacts: {
       items: [],
@@ -154,14 +152,15 @@ const contactsSlice = createSlice({
       error: null,
     },
     filter: '',
+    token: '',
   },
   reducers: {
     setFilter: (state, action) => {
       state.filter = action.payload;
     },
-    setToken:(state,action) => {
-      state.info.token = action.payload.token
-    }
+    setToken: (state, action) => {
+      state.token = action.payload.token;
+    },
   },
   extraReducers: {
     [userLogOut.pending](state, action) {
@@ -172,34 +171,33 @@ const contactsSlice = createSlice({
       state.contacts.isLoading = false;
       state.contacts.error = null;
       state.info.autorizated = false;
-      localStorage.setItem('token','')
       state.info.name = null;
       state.info.email = null;
-      state.info.token = null;
+      state.token = '';
     },
     [userLogOut.rejected](state, action) {
       state.contacts.isLoading = false;
       state.contacts.error = action.payload;
     },
-    [refreshUser.pending](state,action){
-state.contacts.isLoading = true;
+    [refreshUser.pending](state, action) {
+      state.contacts.isLoading = true;
     },
-    [refreshUser.fulfilled](state,action){
+    [refreshUser.fulfilled](state, action) {
       state.contacts.isLoading = false;
       state.info.name = action.payload.name;
       state.info.email = action.payload.email;
-      state.info.token = action.payload.token
+      state.token = action.payload.token;
       state.info.autorizated = true;
       state.contacts.error = null;
-          },
-          [refreshUser.rejected](state,action){
-            state.contacts.isLoading = false;
-            state.contacts.error = action.payload;
-            state.info.autorizated = false;
-            state.info.email = null;
-            state.info.name = null;
-            state.info.token = null;
-                },
+    },
+    [refreshUser.rejected](state, action) {
+      state.contacts.isLoading = false;
+      state.contacts.error = action.payload;
+      state.info.autorizated = false;
+      state.info.email = null;
+      state.info.name = null;
+      state.token = '';
+    },
     [loginUser.pending](state, action) {
       state.contacts.isLoading = true;
     },
@@ -209,8 +207,7 @@ state.contacts.isLoading = true;
       state.contacts.error = false;
       state.info.name = action.payload.data.user.name;
       state.info.email = action.payload.data.user.email;
-      state.info.token = action.payload.data.token;
-      localStorage.setItem('token', action.payload.data.token);
+      state.token = action.payload.data.token;
     },
     [loginUser.rejected](state, action) {
       state.contacts.isLoading = false;
