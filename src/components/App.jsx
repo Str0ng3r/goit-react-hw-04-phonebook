@@ -18,8 +18,10 @@ const navigate = useNavigate();
 useEffect(()=> {
   if(token !== ''){
 dispatch(refreshUser(token))
-  }else if(author){
+  }
+   if(author){
   navigate('/contacts')
+
 }
 },[token,dispatch,author,navigate])
   return (

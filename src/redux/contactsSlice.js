@@ -17,6 +17,7 @@ export const addNewUser = createAsyncThunk(
 
       return response;
     } catch (e) {
+      alert('Sorry this uer have in base')
       return thunkAPI.rejectWithValue(e.message);
     }
   }
@@ -34,6 +35,7 @@ export const loginUser = createAsyncThunk(
       });
       return response;
     } catch (e) {
+      alert('User not Found')
       return thunkAPI.rejectWithValue(e.message);
     }
   }
