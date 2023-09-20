@@ -1,6 +1,7 @@
 import { LiRender } from "./LiRender"
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteBackContacts} from "redux/contactsSlice";
+import style from 'style.module.css'
 export const ListRender = () => {
     const contacts = useSelector(state => state.contacts.items);
     const filter = useSelector(state => state.filter);
@@ -24,7 +25,7 @@ export const ListRender = () => {
       };
 
     return(
-        <ul>
+        <ul className={style.list_render}>
 {
     filterContactsByName().map(item => (
        <LiRender key={item.id} name={item.name} number={item.number} id={item.id} deleteFunc={deleteContactFunc}></LiRender>

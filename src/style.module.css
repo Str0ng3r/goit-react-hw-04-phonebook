@@ -59,7 +59,48 @@
     color: rgba(156, 163, 175,1);
     margin: 4px 0 0 0;
   }
-  
+  .li_list {
+    list-style-type: none;
+    font-family: "Poppins", sans-serif;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+  }
+  .li_list span {
+    font-size: 28px;
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+  }
+  .input_filter {
+    padding: 10px 20px;
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    outline: 0;
+    color: black;
+    font-size: 14px;
+    font-family: "Poppins", sans-serif;
+  }
+  .list_render {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    margin-bottom: 10px;
+  }
+  .button_del {
+    padding: 5px 10px;
+    border-radius: 6px;
+    background-color: rgba(167, 139, 250, 1);
+    margin-left:5px;
+    cursor: pointer;
+  }
+  .button_del:active {
+    background-color: #7cdacc;
+  }
   .label {
     display: block;
     color: rgba(156, 163, 175, 1);
@@ -125,7 +166,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
+    height: 100%;
+    padding: 2rem;
+    box-sizing: border-box;
   }
   .mainTitle {
     text-align: center;
